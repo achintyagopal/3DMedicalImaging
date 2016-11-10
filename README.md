@@ -1,6 +1,7 @@
 # 3DMedicalImaging
 
 ### Paul Watson
+#### Bill Watson ####
 
 Run "python main.py <data_file.nii>"
 
