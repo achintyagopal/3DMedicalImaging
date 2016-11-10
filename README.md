@@ -1,6 +1,6 @@
 # 3DMedicalImaging
 
-*** Paul Watson ***
+### Paul Watson
 
 Run "python main.py <data_file.nii>"
 
