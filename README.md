@@ -1,5 +1,7 @@
 # 3DMedicalImaging
 
+### Paul Watson
+
 Run "python main.py <data_file.nii>"
 
 For development purpose, intermediary is saved in testData/.
