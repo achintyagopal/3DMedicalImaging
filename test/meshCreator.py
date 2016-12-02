@@ -1,7 +1,8 @@
 
-class VolumeCreator():
+class MeshCreator():
 
     def __init__(self):
+
         # http://paulbourke.net/geometry/polygonise/
         self.all_shapes_enc = [[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
 [0, 8, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
@@ -261,195 +262,21 @@ class VolumeCreator():
 [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]]
 
 
-        # self.edges_coord = [(0.5, 0, 0), (0, 0.5, 0), (0, 0, 0.5),
-        #      (0.5, 1, 0), (1, 0.5, 0), (1, 0, 0.5),
-        #      (0, 1, 0.5), (1, 1, 0.5), (0.5, 0, 1),
-        #      (0.5, 1, 1), (0, 0.5, 1), (1, 0.5, 1)]
-
-        # self.all_shapes = []
-
-        # for i in range(256):
-
-        #     shapes = []
-        #     j = 7
-            
-        #     corners = []
-        #     not_corners = []
-        #     for a in range(2):
-        #         for b in range(2):
-        #             for c in range(2):
-        #                 if (i >> j) & 1:
-        #                     corners.append((a,b,c))
-        #                 else:
-        #                     not_corners.append((a,b,c))
-        #                 j -=1
-
-        #     if len(corners) > 4:
-        #         corners = not_corners
-
-        #     if len(corners) == 0:
-        #         all_shapes.append(shapes)
-        #         continue
-
-        #     if len(corners) == 1:
-        #         shapes = self.__one_corner(corners)
-        #         all_shapes.append(shapes)
-        #         continue
-
-        #     if len(corners) == 2:
-        #         shapes = self.__two_corners(corners)
-        #         all_shapes.append(shapes)
-        #         continue
-
-        #     if len(corners) == 3:
-        #         shapes = self.__three_corners(corners)
-        #         all_shapes.append(shapes)
-        #         continue
-
-            # if len(corners) == 4:
-            #     shapes = self.__four_corners(corners)
-            #     all_shapes.append(shapes)
-            #     continue
-
-    # def __one_corner(self, corners):
-    #     a = self.__get_edges(corners[0])
-    #     return [self.__draw_one(a)]
-
-    # def __draw_one(self, a):
-    #     shape = []
-    #     for edge in a:
-    #         shape.append(self.edges_coord.get(edge))
-    #     return shape
-
-    # def __two_corners(self, corners):
-    #     a = self.__get_edges(corners[0])
-    #     b = self.__get_edges(corners[1])
-    #     intersection = list(set(a) & set(b))
-        
-    #     shapes = []
-    #     if len(intersection) == 0:
-    #         shapes.append(self.__draw_one(a))
-    #         shapes.append(self.__draw_one(b))
-    #     elif len(intersection) == 1:
-    #         a.remove(intersection[0])
-    #         b.remove(intersection[0])
-    #         shapes.append(self.__draw_two(a,b))
-    #     else:
-    #         raise Exception("More than one intersection for two corners")
-
-    #     return shapes
-
-    # def __draw_two(self, a, b):
-    #     a1, a2 = a
-    #     b1, b2 = b
-    #     shape = []
-    #     if self.__shares_coord(a1, b1):
-    #         shape = [a1, a2, b2, b1]
-    #     elif self.__shares_coord(a1, b2):
-    #         # later turn into else
-    #         shape = [a1, a2, b1, b2]
-    #     else:
-    #         raise Exception("Cannot draw case 2")
-    #     return shape
-
-    # def __three_corners(corners):
-    #     a = self.__get_edges(corners[0])
-    #     b = self.__get_edges(corners[1])
-    #     c = self.__get_edges(corners[2])
-
-    #     intersection1 = list(set(a) & set(b))
-    #     intersection2 = list(set(c) & set(b))
-    #     intersection3 = list(set(a) & set(c))
-    #     intersection = intersection1 + intersection2 + intersection3
-
-    #     shapes = []
-    #     if len(intersection) == 0:
-    #         shapes.append(self.__draw_one(a))
-    #         shapes.append(self.__draw_one(b))
-    #         shapes.append(self.__draw_one(c))
-    #     elif len(intersection) == 1:
-
-    #         if len(intersection1) == 1:
-    #             a.remove(intersection[0])
-    #             b.remove(intersection[0])
-    #             shapes.append(self.__draw_two(a,b))
-    #             shapes.append(self.__draw_one(c))
-    #         elif len(intersection2) == 2:
-    #             c.remove(intersection[0])
-    #             b.remove(intersection[0])
-    #             shapes.append(self.__draw_two(c,b))
-    #             shapes.append(self.__draw_one(a))
-    #         else:
-    #             a.remove(intersection[0])
-    #             c.remove(intersection[0])
-    #             shapes.append(self.__draw_two(a,c))
-    #             shapes.append(self.__draw_one(b))
-
-    #     elif len(intersection) == 2:
-    #         for pt in intersection:
-    #             if pt in a:
-    #                 a.remove(pt)
-    #             if pt in b:
-    #                 b.remove(pt)
-    #             if pt in c:
-    #                 c.remove(pt)
-
-    #         shapes.append(self.__draw_three(a,b,c))
-    #     else:
-    #         raise Exception("Intersection too big for three corners")
-
-    #     return shapes
-
-    # def __draw_three(self, a, b, c):
-    #     pass
-
-
-    # def __shares_coord(self, a, b):
-    #     if a[0] == b[0]:
-    #         return True
-    #     if a[1] == b[1]:
-    #         return True
-    #     if a[2] == b[2]:
-    #         return True
-    #     return False
-
-    # def __get_edges(self, corner):
-    #     points = []
-    #     x,y,z = corner
-    #     points.append((x-0.5, y, z))
-    #     points.append((x+0.5, y, z))
-    #     points.append((x, y-0.5, z))
-    #     points.append((x, y+0.5, z))
-    #     points.append((x, y, z-0.5))
-    #     points.append((x, y, z+0.5))
-        
-    #     pts = []
-    #     for point in points:
-    #         if self.__in_cube(point):
-    #             pts.append(point)
-    #     return pts
-
-    # def __in_cube(self, point):
-    #     for val in point:
-    #         if val < 0:
-    #             return False
-    #         if val > 1:
-    #             return False
-    #     return True
-
-
     def get_shapes(self, index):
         shapes_enc = self.all_shapes_enc[index]
         shapes = []
         shape = []
         i = 0
         for val in shapes_enc:
+
             if val == -1:
                 break
+
             shape.append(val)
             if i % 3 == 2:
                 shapes.append(shape)
                 shape = []
             i += 1
+
         return shapes
 

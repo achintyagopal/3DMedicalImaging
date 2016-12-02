@@ -2,8 +2,9 @@ import sys
 import os
 from volumeCreator import *
 import numpy as np
+from objExporter import ObjExporter
 
-def marching_cubes(image):
+def marching_cubes(image, filename):
     
     points = []
     faces = []
@@ -13,7 +14,7 @@ def marching_cubes(image):
                     (0.5, 1, 0), (1, 0.5,0), (0.5,0,0), (0, 0.5, 0),
                     (0,1, 0.5), (1,1,0.5), (1,0,0.5), (0,0,0.5)]
 
-    edge_calc = VolumeCreator()
+    mesh_creator = MeshCreator()
 
     for z in range(height - 1):
         for y in range(rows - 1):
@@ -32,7 +33,7 @@ def marching_cubes(image):
                                 if image.item((z+a, y+b, x-c+1)) != 0:
                                     val += 1
 
-                shapes = edge_calc.get_shapes(val)
+                shapes = mesh_creator.get_shapes(val)
 
                 if len(shapes) == 0:
                     continue
@@ -44,30 +45,9 @@ def marching_cubes(image):
                     faces.append(edges)
 
                 for edge_coord in edges_coord:
-                    c,b,a = edge_coord
-                    points.append((z+a, y+b, x+c))
+                    a, b, c = edge_coord
+                    points.append((x+a, y+b, z+c))
 
-
-
-    s = "g name\n"
-    for pt in points:
-        s += "v " + str(int(2 * (pt[2] - cols / 2))) + " " + str(int(2 * (pt[1] - rows / 2))) + " " + str(int(2 * pt[0])) + "\n"
-    s += "usemtl anotherName\nusemap anotherName\n"
-    for f in faces:
-        s += "f"
-        for v in f:
-            s += " " + str(v + 1) + "/" + str(v + 1) + "/" + str(v + 1)
-        s += "\n"
-
-    f = open('something.obj','w')
-    f.write(s)
-    # with open("something.obj", 'wb') as writer:
-        # writer.write(s)
-        # write.close()
-
-
-    # mesh_info = MeshInfo()
-    # mesh_info.set_points(points)
-    # mesh_info.set_facets(faces)
-    # mesh = build(mesh_info)
-    # mesh.write_vtk("test.vtk")
+    exporter = ObjExporter()
+    points, faces = exporter.compress(points, faces)
+    exporter.write_to_file(filename, points, faces, cols/2, rows/2)
