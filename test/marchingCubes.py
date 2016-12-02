@@ -42,7 +42,7 @@ def marching_cubes(image):
                     faces.append(edges)
 
                 for edge_coord in edges_coord:
-                    a,b,c = edge_coord
+                    c,b,a = edge_coord
                     points.append((z+a, y+b, x+c))
 
     s = "g name\n"
