@@ -1,25 +1,15 @@
 #Paul
 import os
 
-
 src_path = './'
 dst_path = '../good/'
-num_files = 98
+num_files = 113
 
 for i in xrange(0, num_files):
-	if i < 10:
-		src = src_path + '00000' + str(i) + '.dcm'
-	elif i < 100:
-		src = src_path + '0000' + str(i) + '.dcm'
-	else:
-		src = src_path + '000' + str(i) + '.dcm'
+	src = src_path + str(i).zfill(6) + ".dcm"
 
 	j = num_files - i - 1
-	if j < 10:
-		dst = dst_path + '00000' + str(j) + '.dcm'
-	elif j < 100:
-		dst = dst_path + '0000' + str(j) + '.dcm'
-	else:
-		dst = dst_path + '000' + str(j) + '.dcm'
+	dst = dst_path + str(j).zfill(6) + ".dcm"
 
+	#print src, dst
 	os.rename(src, dst)

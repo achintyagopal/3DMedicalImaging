@@ -14,7 +14,7 @@ def threshold(directory):
 		if filename.endswith(".dcm"):
 			RefDs = dicom.read_file(directory + filename)
 			ConstPixelDims = (int(RefDs.Rows), int(RefDs.Columns))
-			ConstPixelSpacing = (float(RefDs.PixelSpacing[0]), float(RefDs.PixelSpacing[1]), float(RefDs.SliceThickness))
+			ConstPixelSpacing = (float(RefDs.PixelSpacing[0]), float(RefDs.PixelSpacing[1]))
 
 			x = np.arange(0.0, (ConstPixelDims[0]+1)*ConstPixelSpacing[0], ConstPixelSpacing[0])
 			y = np.arange(0.0, (ConstPixelDims[1]+1)*ConstPixelSpacing[1], ConstPixelSpacing[1])
