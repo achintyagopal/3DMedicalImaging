@@ -50,9 +50,7 @@ def threshold(directory):
 			kernel = np.ones((5, 5), np.uint8)
 			label_img = cv2.morphologyEx(label_img, cv2.MORPH_OPEN, kernel)
 
-
 			label_img = cv2.dilate(label_img, kernel)
-
 
 			#Getting the pixel values of the original image in the head area
 			output_img = cv2.bitwise_and(ArrayDicom, ArrayDicom, mask=label_img)
@@ -62,6 +60,5 @@ def threshold(directory):
 
 	#Stack up all the images into one big 3d array
 	finally_real_output_img = np.array(real_output_img)
-
 
 	return finally_real_output_img
