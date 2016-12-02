@@ -45,8 +45,23 @@ def marching_cubes(image):
                     a,b,c = edge_coord
                     points.append((z+a, y+b, x+c))
 
-    mesh_info = MeshInfo()
-    mesh_info.set_points(points)
-    mesh_info.set_facets(faces)
-    mesh = build(mesh_info)
-    mesh.write_vtk("test.vtk")
+    s = "g name\n"
+    for pt in points:
+        s += "v " + str(2 * pt[0]) + " " + str(2*pt[1]) + " " + str(2 * pt[2]) + "\n"
+    s += "usemtl anotherName\nusemap anotherName\n"
+    for f in faces:
+        s += "f"
+        for v in f:
+            s += " " + str(v) + "/" + str(v) + "/" + str(v)
+        s += "\n"
+
+    with open("something.obj", 'wb') as writer:
+        writer.write(s)
+        write.close()
+
+
+    # mesh_info = MeshInfo()
+    # mesh_info.set_points(points)
+    # mesh_info.set_facets(faces)
+    # mesh = build(mesh_info)
+    # mesh.write_vtk("test.vtk")
