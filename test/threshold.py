@@ -50,7 +50,6 @@ def threshold(directory):
 			kernel = np.ones((5, 5), np.uint8)
 			label_img = cv2.morphologyEx(label_img, cv2.MORPH_OPEN, kernel)
 
-			#TODO Floodfill with white so that none of the inside details are lost when dilating
 
 			label_img = cv2.dilate(label_img, kernel)
 
@@ -64,7 +63,5 @@ def threshold(directory):
 	#Stack up all the images into one big 3d array
 	finally_real_output_img = np.array(real_output_img)
 
-	#for x in xrange(len(finally_real_output_img)):
-		#show_image(finally_real_output_img[x], ms=200)
 
 	return finally_real_output_img
