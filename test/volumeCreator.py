@@ -444,9 +444,12 @@ class VolumeCreator():
         shape = []
         i = 0
         for val in shapes_enc:
+            if val == -1:
+                break
             shape.append(val)
             if i % 3 == 2:
                 shapes.append(shape)
                 shape = []
             i += 1
+        return shapes
 

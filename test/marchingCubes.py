@@ -1,7 +1,7 @@
 import sys
 import os
 from volumeCreator import *
-
+import numpy as np
 
 def marching_cubes(image):
     
@@ -17,6 +17,8 @@ def marching_cubes(image):
 
     for z in range(height - 1):
         for y in range(rows - 1):
+            if y % 20 == 0:
+                print y, z
             for x in range(cols - 1):
                 val = 0
                 for a in range(2):
@@ -45,19 +47,23 @@ def marching_cubes(image):
                     c,b,a = edge_coord
                     points.append((z+a, y+b, x+c))
 
+
+
     s = "g name\n"
     for pt in points:
-        s += "v " + str(2 * pt[0]) + " " + str(2*pt[1]) + " " + str(2 * pt[2]) + "\n"
+        s += "v " + str(int(2 * (pt[2] - cols / 2))) + " " + str(int(2 * (pt[1] - rows / 2))) + " " + str(int(2 * pt[0])) + "\n"
     s += "usemtl anotherName\nusemap anotherName\n"
     for f in faces:
         s += "f"
         for v in f:
-            s += " " + str(v) + "/" + str(v) + "/" + str(v)
+            s += " " + str(v + 1) + "/" + str(v + 1) + "/" + str(v + 1)
         s += "\n"
 
-    with open("something.obj", 'wb') as writer:
-        writer.write(s)
-        write.close()
+    f = open('something.obj','w')
+    f.write(s)
+    # with open("something.obj", 'wb') as writer:
+        # writer.write(s)
+        # write.close()
 
 
     # mesh_info = MeshInfo()
