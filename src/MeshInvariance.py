@@ -85,9 +85,9 @@ def rotationally_invariant_identifier(mesh, length=6):
 
 
 def fft_freq_histogram(data, bin_count, frequency_count=4, weight=None):
-	"""
-	Helper method for Rotational Invariance, performs FFT.
-	"""
+    """
+    Helper method for Rotational Invariance, performs FFT.
+    """
     data = np.reshape(data, -1)
     if weight is None:
         weight = np.ones(len(data))

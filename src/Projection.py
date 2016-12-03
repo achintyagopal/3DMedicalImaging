@@ -33,14 +33,4 @@ def project_mesh(points, faces, shape):
 				img.itemset((pz, px), py)
 	max_val = np.amax(img)
 	img = img * 255 / max_val
-	return img
-
-
-
-
-"""
-TO DO:
-* find features?
-* find keypoints?
-
-"""
+	return np.array(img, dtype=np.uint8)
