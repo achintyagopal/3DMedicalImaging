@@ -2,9 +2,10 @@ import sys
 import os
 from volumeCreator import *
 import numpy as np
+from meshCreator import MeshCreator
 from objExporter import ObjExporter
 
-def marching_cubes(image, filename):
+def marching_cubes(image, spacing, thickness, filename):
     
     points = []
     faces = []
@@ -49,5 +50,5 @@ def marching_cubes(image, filename):
                     points.append((x+a, y+b, z+c))
 
     exporter = ObjExporter()
-    points, faces = exporter.compress(points, faces)
-    exporter.write_to_file(filename, points, faces, cols/2, rows/2)
+
+    exporter.write_to_file(filename, points, faces, cols/2, rows/2, int(thickness/ spacing[0]))
