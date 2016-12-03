@@ -1,9 +1,9 @@
 import sys
 import os
-from volumeCreator import *
 import numpy as np
 from meshCreator import MeshCreator
 from objExporter import ObjExporter
+import pickle
 
 def marching_cubes(image, spacing, thickness, filename):
     
@@ -49,6 +49,11 @@ def marching_cubes(image, spacing, thickness, filename):
                     a, b, c = edge_coord
                     points.append((x+a, y+b, z+c))
 
-    exporter = ObjExporter()
+    # with open('points.file', 'wb') as writer:
+        # pickle.dump(points, writer)
 
+    # with open('faces.file', 'wb') as writer:
+        # pickle.dump(faces, writer)
+
+    exporter = ObjExporter()
     exporter.write_to_file(filename, points, faces, cols/2, rows/2, int(thickness/ spacing[0]))
