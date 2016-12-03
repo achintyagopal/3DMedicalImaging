@@ -66,6 +66,40 @@ def check_args(args):
         if not os.path.exists(args.model_file):
             raise Exception("model file specified by --model-file does not exist.")
 
+def train(training_instances, algorithm):
+
+    return None
+
+def predict(predictor, testing_instances, filename):
+    
+    # predict all testing instances
+    predictions = predictor.test(testing_instances)
+
+    # create predictions file
+    try:
+        total_correct = 0
+        total = 0
+        with open(predictions_file, 'w') as writer:
+            for i in range(len(predictions)):
+                prediction = predctions[i]
+                correct_label = testing_instances[i].get_label()
+                writer.write(str(prediction))
+                writer.write(' ')
+                writer.write(str(correct_label))
+                writer.write('\n')
+        
+                # compute accuracy
+                if correct_label == prediction:
+                    total_correct += 1
+                total += 1
+
+    # print accuracy
+    print total_correct/float(total)
+
+    except IOError:
+        raise Exception("Exception while opening/writing file for writing predicted labels: " + predictions_file)
+
+
 
 def main():
 
@@ -73,19 +107,53 @@ def main():
 
     if args.mode =="train":
         # load feature_file
+        try:
+            with open(args.feature_file, 'rb') as reader:
+                instances = pickle.load(reader)
+        except IOError:
+            raise Exception("Exception while reading the model file.")
+        except pickle.PickleError:
+            raise Exception("Exception while loading pickle.")
+                
         # get training feature vectors
+        training_instances = instances[0] # or instances["train"]
+
         # train model
-        # save model
-        pass
+        predictor = train(training_instances, args.training_algorithm)
+
+        # save the model
+        try:
+            with open(args.model_file, 'wb') as writer:
+                pickle.dump(predictor, writer)
+        except IOError:
+            raise Exception("Exception while writing to the model file.")        
+        except pickle.PickleError:
+            raise Exception("Exception while dumping pickle.")
+
     elif args.mode == "test":
         # load model_file
-        # looad feature-file
+        try:
+            with open(args.model_file, 'rb') as writer:
+                predictor = pickle.load(predictor)
+        except IOError:
+            raise Exception("Exception while writing to the model file.")        
+        except pickle.PickleError:
+            raise Exception("Exception while dumping pickle.")
+
+        # load feature_file
+        try:
+            with open(args.feature_file, 'rb') as reader:
+                instances = pickle.load(reader)
+        except IOError:
+            raise Exception("Exception while reading the model file.")
+        except pickle.PickleError:
+            raise Exception("Exception while loading pickle.")
+
         # get testing feature vectors
-        # test model
-        # calculate accuracy
-        # print accuracy
-        # save predictions file
-        pass
+        testing_instances = instances[1] # or instances["test"]
+
+        predict(predictor, testing_instances, args.predictions_file)
+
     else:
         # get directory
         # for each patient (store patient id as label)
