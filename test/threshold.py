@@ -61,4 +61,4 @@ def threshold(directory):
 	#Stack up all the images into one big 3d array
 	finally_real_output_img = np.array(real_output_img)
 
-	return finally_real_output_img
+	return finally_real_output_img, RefDs.SliceThickness, RefDs.PixelSpacing
