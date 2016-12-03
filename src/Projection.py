@@ -2,6 +2,16 @@ import numpy as np
 import cv2
 
 def project_mesh(points, faces, shape):
+	"""
+	Method to Project front of a mesh to a 2d image.
+	Params:
+		list of points
+		list of mesh faces
+		shape of new img
+
+	Returns:
+		numpy array of projection.
+	"""
 	z, y, x = shape
 	img = np.zeros((2 * z, 2 * x))
 
@@ -25,3 +35,12 @@ def project_mesh(points, faces, shape):
 	img = img * 255 / max_val
 	return img
 
+
+
+
+"""
+TO DO:
+* find features?
+* find keypoints?
+
+"""
