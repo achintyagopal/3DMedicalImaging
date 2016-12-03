@@ -45,7 +45,7 @@ def rotationally_invariant_identifier(mesh, length=6):
     	identifer: (length) float array of unique identifier
     """
 
-    frequency_count = int(length - 2)
+    frequency_count = int(length)
 
     # calculate the mass properties of the mesh, which is doing a surface integral to
     # find the center of volume of the mesh
@@ -75,12 +75,7 @@ def rotationally_invariant_identifier(mesh, length=6):
                                                 frequency_count=frequency_count,
                                                 weight=area_weight)
 
-    # using the volume (from surface integral), surface area, and top
-    # frequencies
-    identifier = np.hstack((mass_properties['volume'],
-                            mass_properties['surface_area'],
-                            freq_formatted))
-    return identifier
+    return freq_formatted
 
 
 
