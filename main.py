@@ -6,6 +6,7 @@ import src.meshingTest
 
 from test.threshold import threshold
 from test.marchingCubes import marchingCubes
+from test.instance import Instance
 
 def get_args():
 
@@ -170,7 +171,7 @@ def main():
             for patient_id in dirs:
 
                 print 'Patient ', patient_id
-                # TODO need to make instance class to save patient id and features together
+
                 # take min(4, sets) sets
                 for root_2, dirs_2, _ in os.walk(os.path.join(root, patient_id)):  # sorry about var names :/
                     num_sets = 0
@@ -185,18 +186,16 @@ def main():
 
                         num_sets += 1
 
-                        # if not threshold: marchingCubes
                         filename = str(patient_id) + '_' + str(num_sets) + '.obj'
                         if args.mode != 'threshold':
                             print 'MarchingCubes set ', num_sets
                             points, faces = marching_cubes(output_img, pixel_spacing, slice_thickness, filename)
                         
-                        # if feature: 
                         if args.mode == 'feature':
                             print 'Featuring set ', num_sets
                             feature_vector = create_instance(filename, points, faces, args.feature_algorithm)
                             instance = Instance(feature_vector, patient_id)
-                            # TODO check algorithm, create accordingly
+                            # check algorithm, create accordingly
                             if num_sets in (1,2):
                                 complete_instances[0].append(instance)
                             else:
