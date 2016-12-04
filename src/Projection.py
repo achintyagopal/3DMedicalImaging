@@ -1,8 +1,5 @@
 import numpy as np
 import cv2
-import math
-import numpy.linalg as la
-import scipy.optimize as sopt
 
 
 def project_mesh(points, faces, shape):
@@ -43,9 +40,6 @@ def project_mesh(points, faces, shape):
 	return np.array(img, dtype=np.uint16)
 
 
-
-
-
 def smooth_projection(img, scale = 700, ker = 4):
 	"""
 	Smooths a projection.
@@ -61,7 +55,6 @@ def smooth_projection(img, scale = 700, ker = 4):
 	tmp = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
 	tmp = scale * tmp
 	return tmp
-
 
 
 def laplacian(img):
@@ -101,8 +94,6 @@ def getWindow(img, pos, window = (15,15)):
 	yR = min(ySize, y1 + w + 1)
 	patch = img[yL:yR, xL:xR].copy() #Find Coord
 	return patch
-
-
 
 
 def gradient_descent(img, iteration = 10, gamma = 0.01, win = 15):
@@ -174,9 +165,3 @@ def gradient_descent(img, iteration = 10, gamma = 0.01, win = 15):
 
 
 	return color
-
-
-
-
-
-
