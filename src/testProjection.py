@@ -2,7 +2,7 @@ import cv2
 import numpy as np 
 import Projection
 import pickle
-import HaarDetection
+# import HaarDetection
 
 """
 project_mesh
