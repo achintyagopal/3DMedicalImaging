@@ -3,6 +3,9 @@ import os
 
 import src.meshingTest
 
+from test.threshold import threshold
+from test.marchingCubes import marchingCubes
+
 
 def get_args():
 
@@ -156,16 +159,33 @@ def main():
 
     else:
         # get directory
+        directory = args.folder
         # for each patient (store patient id as label)
-        # take min(4, sets) sets
-        # for each set:
-        # threshold
-        # if not threshold: mrachingCubes
-        # if feature: 
-            # check algorithm, create accordingly
-            # if set# == 1 or 2: train
-            # if set# == 3 or 4: test
-        pass
+        for root, dirs, files in os.walk(directory):
+            for patient_id in dirs:
+
+                print 'Patient ', patient_id
+                # take min(4, sets) sets
+                for root_2, dirs_2, files_2 in os.walk(patient_id):  # should the arg be directory + patient_id ? sorry about var names :/
+                    num_sets = 0
+                    for set_name in dirs_2:
+
+                        print 'Thesholding set ', num_sets
+                        if num_sets < 4:
+                            output_img, slice_thickness, pixel_spacing = threshold(set_name) # again, should this be directory + patient_id + set_name ?
+                        num_sets += 1
+
+                        # if not threshold: marchingCubes
+                        if args.mode != 'threshold':
+                            print 'MarchingCubes set ', num_sets
+                            marching_cubes(output_img, pixel_spacing, slice_thickness, str(patient_id) + '_' + str(num_sets) + '.obj')
+                        
+                        # if feature: 
+                        if args.mode == 'feature':
+                            print 'Featuring set ', num_sets
+                            # TODO check algorithm, create accordingly
+                            # if set# == 1 or 2: train
+                            # if set# == 3 or 4: test
 
 
 
