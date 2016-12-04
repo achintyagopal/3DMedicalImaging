@@ -165,6 +165,7 @@ def main():
             for patient_id in dirs:
 
                 print 'Patient ', patient_id
+                # TODO need to make instance class to save patient id and features together
                 # take min(4, sets) sets
                 for root_2, dirs_2, files_2 in os.walk(os.path.join(root, patient_id)):  # sorry about var names :/
                     num_sets = 0
