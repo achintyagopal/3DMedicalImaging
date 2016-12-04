@@ -6,6 +6,7 @@ from test.threshold import threshold
 from test.marchingCubes import marchingCubes
 from test.instance import Instance
 
+
 def get_args():
 
     parser = argparse.ArgumentParser(description="This is the main file for running 3DMedicalImaging.")
@@ -32,6 +33,7 @@ def get_args():
     check_args(args)
 
     return args
+
 
 def check_args(args):
     if args.mode == "threshold":
@@ -68,13 +70,14 @@ def check_args(args):
         if not os.path.exists(args.model_file):
             raise Exception("model file specified by --model-file does not exist.")
 
-def train(training_instances, algorithm):
 
+def train(training_instances, algorithm):
     return None
+
 
 def create_instance(filename, pts, faces, algorithm):
-
     return None
+
 
 def predict(predictor, testing_instances, filename):
     
@@ -104,7 +107,6 @@ def predict(predictor, testing_instances, filename):
 
     except IOError:
         raise Exception("Exception while opening/writing file for writing predicted labels: " + predictions_file)
-
 
 
 def main():
