@@ -126,7 +126,7 @@ def gradient_descent(img, iteration = 10, gamma = 0.01, win = 15):
 		# Get 15x15 window around patch
 
 		patch = getWindow(img, start, window = (win, win))
-		# Get max and min (REMEBER X and Y are flipped here.)
+		# Get max and min (REMEMBER X and Y are flipped here.)
 		minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(patch)
 		local_min_x, local_min_y = minLoc
 		new_y = local_min_y - win_center + start[0]
@@ -143,7 +143,6 @@ def gradient_descent(img, iteration = 10, gamma = 0.01, win = 15):
 	local_min_x = 0
 	local_min_y = 0
 	count = 0
-	# for each start point -> make random set of points.
 	while (local_min_x != win_center or local_min_y != win_center):
 		if count == iteration:
 			print "END ON INTER"
@@ -152,7 +151,7 @@ def gradient_descent(img, iteration = 10, gamma = 0.01, win = 15):
 		# Get 15x15 window around patch
 
 		patch = getWindow(img, start, window = (win, win))
-		# Get max and min (REMEBER X and Y are flipped here.)
+		# Get max and min (REMEMBER X and Y are flipped here.)
 		minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(patch)
 		local_min_x, local_min_y = minLoc
 		new_y = local_min_y - win_center + start[0]
