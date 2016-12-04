@@ -99,15 +99,14 @@ def getWindow(img, pos, window = (15,15)):
 def gradient_descent(img, iteration = 10, gamma = 0.01, win = 15):
 	color = cv2.cvtColor(np.array(img * 255.0 / np.amax(img), dtype=np.uint8), cv2.COLOR_GRAY2RGB)
 	max_y, max_x = img.shape
-
-
+	tmp = color.copy()
 	# Nose
 	
 	parts = {}
 
 	minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(img)
 	cv2.circle(color, maxLoc, 1, (255, 0, 255), 5)
-	parts["Global_Max"] = maxLoc
+	parts["Nose"] = maxLoc
 
 	img = img.copy()
 	img[img==0] = 65535
@@ -138,8 +137,9 @@ def gradient_descent(img, iteration = 10, gamma = 0.01, win = 15):
 		
 
 	cv2.circle(color, (start[1], start[0]), 1, (255, 56, 45), 5)
-	
-	start = (parts["Global_Max"][1], parts["Global_Max"][0]+20)
+	parts["Left_eye"] = (start[1], start[0])
+
+	start = (parts["Nose"][1], parts["Nose"][0]+20)
 	local_min_x = 0
 	local_min_y = 0
 	count = 0
@@ -161,6 +161,64 @@ def gradient_descent(img, iteration = 10, gamma = 0.01, win = 15):
 		count += 1	
 	
 	cv2.circle(color, (start[1], start[0]), 1, (0, 255, 0), 5)
+	parts["Right_eye"] = (start[1], start[0])
+
+	flood = floodFill(tmp, (parts["Right_eye"][0] + 20, parts["Right_eye"][1] + 5), val=(0,255,0), lo=0, hi=0)
+	flood = floodFill(flood, (parts["Left_eye"][0] - 20, parts["Left_eye"][1] + 5), val=(0,0,255), lo=0, hi=0)
+	flood = floodFill(flood, (parts["Nose"][0], parts["Nose"][1]), val=(255,0,0), lo=11, hi=11, fixedRng=True)
+	
+	print parts
+	return color, flood
 
 
-	return color
+
+def floodFill(img, seedPoint, val=(255,255,255), lo=25, hi=25, fixedRng=False, connectivity=4):
+	"""
+	Flood Fill Algorithm
+	Params:
+		* img - image
+		* seedPoint - startPoint
+		* val -OPTIONAL - New Value; 255,255,255
+		* lo - OPTIONAL - Max lower birghtness/color diff; def: 20
+		* hi - OPTIONAL - Max upper birghtness/color diff; def: 20
+		* fixedRng - OPTIONAL - TRUE=FIXED diff btw curr and see; FALSE=MASK only fills mask def:False
+		* connectivity - OPTIONAL - 4 or 8 bit neightborrhood, def:8
+	Returns:
+		* Flood Filles Img
+	"""
+	flooded = img.copy()
+	h, w = img.shape[:2]
+	mask = np.zeros((h+2,w+2), np.uint8)
+	flags = connectivity
+	if fixedRng:
+		flags |= cv2.FLOODFILL_FIXED_RANGE
+	cv2.floodFill(flooded, mask, seedPoint, val, (lo,)*3, (hi,)*3, flags)
+	return flooded
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
