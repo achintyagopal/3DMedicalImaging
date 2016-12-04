@@ -2,8 +2,6 @@ import sys
 import os
 import pickle
 
-import src.meshingTest
-
 from test.threshold import threshold
 from test.marchingCubes import marchingCubes
 from test.instance import Instance
