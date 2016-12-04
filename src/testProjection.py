@@ -2,7 +2,7 @@ import cv2
 import numpy as np 
 import Projection
 import pickle
-import HaarDetection
+# import HaarDetection
 
 """
 project_mesh
@@ -30,12 +30,14 @@ def test(points, faces, ker=4, scale=700):
 	# cv2.imshow("pic", tmp)
 
 	cv2.namedWindow("lap", cv2.WINDOW_NORMAL)
-	cv2.imshow("lap", lap)
+	#cv2.imshow("lap", lap)
 	# cv2.imwrite("tmp.jpg", np.array(tmp)
 
-	gd = Projection.gradient_descent(tmp, iteration=100, win=10)
+	gd, floo = Projection.gradient_descent(tmp, iteration=100, win=10)
 	cv2.namedWindow("gd", cv2.WINDOW_NORMAL)
 	cv2.imshow("gd", gd)
+	cv2.namedWindow("flood", cv2.WINDOW_NORMAL)
+	#cv2.imshow("flood", floo)
 	
 	cv2.imwrite("grad_des_ret.jpg", gd)
 

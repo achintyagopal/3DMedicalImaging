@@ -1,9 +1,13 @@
 import sys
 import os
+import argparse
 import pickle
 
+from src.MeshInvariance import load, rotationally_invariant_identifier
+from src.projectionVector import projection_based_vector
+
 from test.threshold import threshold
-from test.marchingCubes import marchingCubes
+from test.marchingCubes import marching_cubes
 from test.instance import Instance
 
 
@@ -72,10 +76,18 @@ def check_args(args):
 
 
 def train(training_instances, algorithm):
-    return None
+    predictor = KNN()
+    if algorithm == "KNN":
+        predictor.train(training_instances)
+    return predictor
 
 
-def create_instance(filename, pts, faces, algorithm):
+def create_instance(filename, pts, faces, shape, algorithm):
+    if algorithm == "fft":
+        load(filename)
+        return rotationally_invariant_identifier(mesh)
+    elif algorithm == "proj":
+        return projection_based_vector(pts, faces, shape)
     return None
 
 
@@ -85,9 +97,10 @@ def predict(predictor, testing_instances, filename):
     predictions = predictor.test(testing_instances)
 
     # create predictions file
-    try:
-        total_correct = 0
-        total = 0
+    total_correct = 0
+    total = 0
+     
+    try:   
         with open(predictions_file, 'w') as writer:
             for i in range(len(predictions)):
                 prediction = predictions[i]
@@ -102,8 +115,8 @@ def predict(predictor, testing_instances, filename):
                     total_correct += 1
                 total += 1
 
-    # print accuracy
-    print total_correct/float(total)
+        # print accuracy
+        print total_correct / float(total)
 
     except IOError:
         raise Exception("Exception while opening/writing file for writing predicted labels: " + predictions_file)
@@ -193,7 +206,7 @@ def main():
                         
                         if args.mode == 'feature':
                             print 'Featuring set ', num_sets
-                            feature_vector = create_instance(filename, points, faces, args.feature_algorithm)
+                            feature_vector = create_instance(filename, points, faces, output_img.shape, args.feature_algorithm)
                             instance = Instance(feature_vector, patient_id)
                             # check algorithm, create accordingly
                             if num_sets in (1,2):

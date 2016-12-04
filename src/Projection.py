@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+from images import *
 
 
 def project_mesh(points, faces, shape):
@@ -99,15 +100,14 @@ def getWindow(img, pos, window = (15,15)):
 def gradient_descent(img, iteration = 10, gamma = 0.01, win = 15):
 	color = cv2.cvtColor(np.array(img * 255.0 / np.amax(img), dtype=np.uint8), cv2.COLOR_GRAY2RGB)
 	max_y, max_x = img.shape
-
-
+	tmp = color.copy()
 	# Nose
 	
 	parts = {}
 
 	minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(img)
-	cv2.circle(color, maxLoc, 1, (255, 0, 255), 5)
-	parts["Global_Max"] = maxLoc
+	# cv2.circle(color, maxLoc, 1, (255, 0, 255), 5)
+	parts["Nose"] = maxLoc
 
 	img = img.copy()
 	img[img==0] = 65535
@@ -131,15 +131,16 @@ def gradient_descent(img, iteration = 10, gamma = 0.01, win = 15):
 		local_min_x, local_min_y = minLoc
 		new_y = local_min_y - win_center + start[0]
 		new_x = local_min_x - win_center + start[1]
-		cv2.line(color, (start[1], start[0]), (new_x, new_y), (255, 56, 45), 4)
+		# cv2.line(color, (start[1], start[0]), (new_x, new_y), (255, 56, 45), 4)
 		start = (new_y, new_x)
 		count += 1
 		
 		
 
-	cv2.circle(color, (start[1], start[0]), 1, (255, 56, 45), 5)
-	
-	start = (parts["Global_Max"][1], parts["Global_Max"][0]+20)
+	# cv2.circle(color, (start[1], start[0]), 1, (255, 56, 45), 5)
+	parts["Left_eye"] = (start[1], start[0])
+
+	start = (parts["Nose"][1], parts["Nose"][0]+20)
 	local_min_x = 0
 	local_min_y = 0
 	count = 0
@@ -156,11 +157,84 @@ def gradient_descent(img, iteration = 10, gamma = 0.01, win = 15):
 		local_min_x, local_min_y = minLoc
 		new_y = local_min_y - win_center + start[0]
 		new_x = local_min_x - win_center + start[1]
-		cv2.line(color, (start[1], start[0]), (new_x, new_y), (100, 255, 60), 4)
+		# cv2.line(color, (start[1], start[0]), (new_x, new_y), (100, 255, 60), 4)
 		start = (new_y, new_x)
 		count += 1	
 	
-	cv2.circle(color, (start[1], start[0]), 1, (0, 255, 0), 5)
+	# cv2.circle(color, (start[1], start[0]), 1, (0, 255, 0), 5)
+	parts["Right_eye"] = (start[1], start[0])
+
+	flood = floodFill(tmp, (parts["Right_eye"][0] + 20, parts["Right_eye"][1] + 5), val=(0,255,0), lo=0, hi=0)
+	flood = floodFill(flood, (parts["Left_eye"][0] - 20, parts["Left_eye"][1] + 5), val=(0,0,255), lo=0, hi=0)
+	flood = floodFill(flood, (parts["Nose"][0], parts["Nose"][1]), val=(255,0,0), lo=11, hi=11, fixedRng=True)
+
+	right_eye_mask = cv2.inRange(flood, (0,254,0), (0,255,0))
+	left_eye_mask = cv2.inRange(flood, (0,0,254), (0,0,255))
+	nose_mask = cv2.inRange(flood, (254,0,0), (255,0,0))
+
+	_, right_contours, _ = cv2.findContours(right_eye_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+	right_ellipse = cv2.fitEllipse(right_contours[0])
+	# cv2.ellipse(color, right_ellipse, (0,255,0), 2)
+
+	_, left_contours, _ = cv2.findContours(left_eye_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+	left_ellipse = cv2.fitEllipse(left_contours[0])
+	# cv2.ellipse(color, left_ellipse, (0,0,255), 2)
+
+	_, nose_contours, _ = cv2.findContours(nose_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+	nose_ellipse = cv2.fitEllipse(nose_contours[0])
+	# cv2.ellipse(color, nose_ellipse, (255,0,0), 2)
+
+	return right_ellipse, left_ellipse, nose_ellipse
 
 
-	return color
+
+def floodFill(img, seedPoint, val=(255,255,255), lo=25, hi=25, fixedRng=False, connectivity=4):
+	"""
+	Flood Fill Algorithm
+	Params:
+		* img - image
+		* seedPoint - startPoint
+		* val -OPTIONAL - New Value; 255,255,255
+		* lo - OPTIONAL - Max lower birghtness/color diff; def: 20
+		* hi - OPTIONAL - Max upper birghtness/color diff; def: 20
+		* fixedRng - OPTIONAL - TRUE=FIXED diff btw curr and see; FALSE=MASK only fills mask def:False
+		* connectivity - OPTIONAL - 4 or 8 bit neightborrhood, def:8
+	Returns:
+		* Flood Filles Img
+	"""
+	flooded = img.copy()
+	h, w = img.shape[:2]
+	mask = np.zeros((h+2,w+2), np.uint8)
+	flags = connectivity
+	if fixedRng:
+		flags |= cv2.FLOODFILL_FIXED_RANGE
+	cv2.floodFill(flooded, mask, seedPoint, val, (lo,)*3, (hi,)*3, flags)
+	return flooded
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
