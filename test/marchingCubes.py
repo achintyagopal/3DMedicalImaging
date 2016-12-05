@@ -33,7 +33,7 @@ def marching_cubes(image, spacing, thickness, filename):
                             else:
                                 if image.item((z+a, y+b, x-c+1)) != 0:
                                     val += 1
-
+                                    
                 shapes = mesh_creator.get_shapes(val)
 
                 if len(shapes) == 0:
@@ -57,3 +57,4 @@ def marching_cubes(image, spacing, thickness, filename):
 
     exporter = ObjExporter()
     exporter.write_to_file(filename, points, faces, cols/2, rows/2, int(thickness/ spacing[0]))
+    return points, faces

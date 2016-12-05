@@ -33,13 +33,13 @@ def test(points, faces, ker=4, scale=700):
 	#cv2.imshow("lap", lap)
 	# cv2.imwrite("tmp.jpg", np.array(tmp)
 
-	gd, floo = Projection.gradient_descent(tmp, iteration=100, win=10)
-	cv2.namedWindow("gd", cv2.WINDOW_NORMAL)
-	cv2.imshow("gd", gd)
-	cv2.namedWindow("flood", cv2.WINDOW_NORMAL)
+	_ = Projection.gradient_descent(tmp, iteration=100, win=10)
+	#cv2.namedWindow("gd", cv2.WINDOW_NORMAL)
+	#cv2.imshow("gd", gd)
+	#cv2.namedWindow("flood", cv2.WINDOW_NORMAL)
 	#cv2.imshow("flood", floo)
 	
-	cv2.imwrite("grad_des_ret.jpg", gd)
+	#cv2.imwrite("grad_des_ret.jpg", gd)
 
 	# cv2.namedWindow("x", cv2.WINDOW_NORMAL)
 	# cv2.imshow("x", np.array(abs(x), dtype=np.uint8))
