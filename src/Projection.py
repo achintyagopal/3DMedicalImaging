@@ -178,7 +178,7 @@ def gradient_descent(img, iteration = 10, gamma = 0.01, win = 15):
 
 	_, right_contours, _ = cv2.findContours(right_eye_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 	right_ellipse = cv2.fitEllipse(right_contours[0])
-	print right_ellipse
+	# print right_ellipse
 	# cv2.ellipse(color, right_ellipse, (0,255,0), 2)
 
 	_, left_contours, _ = cv2.findContours(left_eye_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
