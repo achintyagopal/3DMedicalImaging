@@ -66,8 +66,7 @@ def rotationally_invariant_identifier(mesh, length=6):
     if bin_count > _MIN_BIN_COUNT:
         face_area = mesh.area_faces
         face_radii = vertex_radii[mesh.faces].reshape(-1)
-        area_weight = np.tile(
-                             (face_area.reshape((-1, 1)) * (1.0 / 3.0)), (1, 3)).reshape(-1)
+        area_weight = np.tile((face_area.reshape((-1, 1)) * (1.0 / 3.0)), (1, 3)).reshape(-1)
 
         if face_radii.std() > 1e-3:
             freq_formatted = fft_freq_histogram(face_radii,

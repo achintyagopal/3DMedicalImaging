@@ -5,7 +5,7 @@ from meshCreator import MeshCreator
 from objExporter import ObjExporter
 import pickle
 
-def marching_cubes(image, spacing, thickness, filename):
+def marching_cubes(image, thickness, filename):
     
     points = []
     faces = []
@@ -56,5 +56,5 @@ def marching_cubes(image, spacing, thickness, filename):
         # pickle.dump(faces, writer)
 
     exporter = ObjExporter()
-    exporter.write_to_file(filename, points, faces, cols/2, rows/2, int(thickness/ spacing[0]))
+    exporter.write_to_file(filename, points, faces, cols/2, rows/2, thickness*2)
     return points, faces
